@@ -190,11 +190,11 @@ document.getElementById('load').addEventListener('click', () => {
   //accept [filename].freq.json files
   input.accept = '.freq.json';
   input.click();
-  input.addEventListener('change',  () => {
-    const file = this.files[0];
+  input.addEventListener('change', () => {
+    const file = input.files[0];
     const reader = new FileReader();
-    reader.onload = function (progressEvent) {
-      const data = JSON.parse(this.result);
+    reader.addEventListener('load', () => {
+      const data = JSON.parse(reader.result);
       const tracks = document.querySelectorAll('.track');
       for (let i = 0; i < tracks.length; i++) {
         tracks[i].remove();
@@ -203,7 +203,8 @@ document.getElementById('load').addEventListener('click', () => {
         const track = new Track(data.tracks[i].waveform, data.tracks[i].volume, data.tracks[i].frequency);
         track.trackElement.querySelector('.trackTitle').textContent = data.tracks[i].title;
       }
-    };
+      document.getElementById('projectTitle').textContent = data.projectTitle;
+    });
     reader.readAsText(file);
   });
 });
