@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Oscillator Widget - Multiple Tracks</title>
+  <style>
+    .container {
+      text-align: center;
+    }
+    /* keep track element size */
+    .tracks {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      flex-direction: row;
+      align-items: center;
+      align-content: center;
+      gap: 3rem;
+      width: 100%;
+    }
+    .track {
+      margin: 10px;
+      max-width: fit-content;
+    }
+    button {
+      margin: 10px;
+    }
+    .track {
+      margin: 10px;
+    }
+    input[type=range] {
+      display: block;
+    }
+    [contenteditable="true"] {
+      min-width: 4em;
+      background-color: #eee;
+      border: 1px solid #999;
+    }
+    body {
+      font-family: sans-serif;
+      max-width: 100vw;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Oscillator Widget - Multiple Tracks</h1>
+    <h2>Project: <span id="projectTitle" contenteditable="true">Untitled</span></h2>
+    <div id="tracks" class="tracks"></div>
+    <button id="addTrack">Add Track</button>
+    <button id="playAll">Play All</button>
+    <button id="stopAll">Stop All</button>
+    <button id="save">Save</button>
+    <button id="load">Load</button>
+  </div>
+
+  <template id="trackTemplate">
+    <div class="track">
+      <h3 class="trackTitle" contenteditable="true">Track</h3>
+      <label for="waveform">Select Waveform:</label>
+      <select class="waveform">
+        <option value="sawtooth">Sawtooth</option>
+        <option value="square">Square</option>
+        <option value="sine">Sine</option>
+        <option value="triangle">Triangle</option>
+      </select>
+      <br>
+      <label for="frequency">Frequency: <span class="freqdisplay" contenteditable="true" type="number"></span></label>
+      <input type="range" class="frequency" min="20" max="2500" step="1" value="440">
+      <br>
+      <label for="volume">Volume: <span class="volumedisplay" contenteditable="true" type="number"></span></label>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
+      <br>
+      <button class="playBtn">Play</button>
+      <button class="stopBtn">Stop</button>
+      <button class="deleteBtn">Delete</button>
+    </div>
+  </template>
+
+  <script src="script.js">
+  </script>
+  <script>
+
+  </script>
+</body>
+</html>
