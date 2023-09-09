@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Oscillator Widget - Multiple Tracks</title>
   <meta charset="utf-8">
@@ -8,6 +9,7 @@
     .container {
       text-align: center;
     }
+
     /* keep track element size */
     .tracks {
       display: flex;
@@ -19,29 +21,35 @@
       gap: 3rem;
       width: 100%;
     }
+
     .track {
       margin: 10px;
       max-width: fit-content;
     }
+
     button {
       font-size: medium;
       padding: 0.3rem;
 
     }
+
     .ctrlBar button {
       background-color: blueviolet;
       color: white;
     }
+
     .ctrlBar button:hover {
       background-color: darkviolet;
     }
-    .ctrlBar > div {
+
+    .ctrlBar>div:not(.clean) {
       display: flex;
       flex-direction: row;
       gap: 0.4rem;
     }
+
     /* sticky ctrlBar to the bottom of the screen */
-    .ctrlBar{
+    .ctrlBar {
       position: fixed;
       bottom: 0;
       left: 0;
@@ -54,17 +62,21 @@
       justify-content: center;
       align-items: center;
     }
+
     .track {
       margin: 10px;
     }
+
     input[type=range] {
       display: block;
     }
+
     [contenteditable="true"] {
       min-width: 4em;
       background-color: #eee;
       border: 1px solid #999;
     }
+
     body {
       font-family: sans-serif;
       max-width: 100%;
@@ -74,22 +86,34 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>Oscillator Widget - Multiple Tracks</h1>
     <h2>Project: <span id="projectTitle" contenteditable="true">Untitled</span></h2>
+    <span>Simulate Piano Keys<input type="checkbox" id="doPianoKeys"></span>
     <div id="tracks" class="tracks"></div>
+
     <div class="ctrlBar">
-    <div>
-      <button id="playAll">Play All</button>
-      <button id="stopAll">Stop All</button>
-    </div>
-    <button id="addTrack">Add Track</button>
-    <div>
-      <button id="save">Save</button>
-      <button id="load">Load</button>
-    </div>
-    </div>
+      <div class="clean">
+        <label style="display: flex; flex-direction: column;">
+          <span contenteditable="true" type="number" id="globalFrequencyOffsetDisplay">
+          </span><br>
+        </label>
+        <input type="range" id="globalFrequencyOffset" min="-28" max="28" step="0.5" value="0">
+      </div>
+      <div>
+        <div class="padding:2rem;">
+          <button id="playAll">Play All</button>
+          <button id="stopAll">Stop All</button>
+        </div>
+        <button id="addTrack">Add Track</button>
+        <div>
+          <button id="save">Save</button>
+          <button id="load">Load</button>
+        </div>
+      </div>
+      </div>
   </div>
 
   <template id="trackTemplate">
@@ -105,6 +129,7 @@
       <br>
       <label for="frequency">Frequency: <span class="freqdisplay" contenteditable="true" type="number"></span></label>
       <input type="range" class="frequency" min="20" max="2500" step="1" value="440">
+      <input type="hidden" class="frequencyOffset" value="0">
       <br>
       <label for="volume">Volume: <span class="volumedisplay" contenteditable="true" type="number"></span></label>
       <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
@@ -121,4 +146,5 @@
 
   </script>
 </body>
+
 </html>
