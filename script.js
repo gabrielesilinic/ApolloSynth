@@ -29,7 +29,7 @@ class OscillatorWidget {
     this.oscillator = null;
     this.waveform = waveform;
     this.volume = volume;
-    this.frequency = frequency;
+    this.frequency = parseFloat(frequency);
     this.frequencyOffset = 0;
   }
 
@@ -38,6 +38,7 @@ class OscillatorWidget {
     if (this.oscillator === null) {
       this.oscillator = this.audioCtx.createOscillator();
       this.oscillator.type = this.waveform;
+      this.frequency = parseFloat(this.frequency);
       this.oscillator.frequency.value = this.frequency + this.frequencyOffset;
 
       // create gain node for volume control
@@ -117,7 +118,8 @@ class Track {
     this.trackElement.querySelector('.trackTitle').textContent = 'Track ' + document.querySelectorAll('.track').length;
     //add this to the trackElement as data so that we can access it later
     const oscillator = new OscillatorWidget(waveform, volume, frequency);
-
+    //set offset to 0
+    oscillator.setFrequencyOffset(0);
     this.trackElement.querySelector('.waveform').addEventListener('change', (e) => {
       const selectedWaveform = e.target.value;
       oscillator.setWaveform(selectedWaveform);
@@ -147,6 +149,12 @@ class Track {
     });
 
     this.trackElement.querySelector('.playBtn').addEventListener('click', () => {
+      //get the frequency offset input and set the offset
+      const frequencyOffsetInput = document.getElementById('globalFrequencyOffset');
+      oscillator.setFrequencyOffset(parseFloat(frequencyOffsetInput.value));
+      //get the widget frequency and set the offset
+      const widgetFrequency = this.trackElement.querySelector('.frequency').value;
+      oscillator.setFrequency(parseFloat(widgetFrequency));
       oscillator.play();
     });
 
@@ -319,7 +327,7 @@ function ls_load() {
 
 //use qwerty middle row for piano keys under C4, middle row L=-1, K=-2, J=-3, H=-4, G=-5, F=-6, D=-7, S=-8, A=-9
 //use qwerty top row for piano keys form C4, top row Q=0, W=1, E=2, R=3, T=4, Y=5, U=6, I=7, O=8, P=9
-NoteMappings = {
+var NoteMappings = {
   KeyL: -1,
   KeyK: -2,
   KeyJ: -3,
@@ -340,8 +348,11 @@ NoteMappings = {
   KeyO: 8,
   KeyP: 9
 };
+var kpress=false;
 //global key down event listener
 document.addEventListener('keydown', (e) => {
+  if(kpress) return;
+  kpress=true;
   // use key codes as piano keys
   const key = e.code;//es. KeyA, KeyS, KeyD, KeyF, KeyG, KeyH, KeyJ, KeyK, KeyL etc.
   // check if the key is in the note mappings
@@ -354,17 +365,26 @@ document.addEventListener('keydown', (e) => {
     frequencyOffsetInput.value = offset;
     frequencyOffsetInput.dispatchEvent(new Event('input'));
     //click the play all button just in case
-    document.getElementById('playAll').click();
+    //iterate through all play buttons and click them
+    const play_buttons = document.getElementsByClassName('playBtn');
+    for (let i = 0; i < play_buttons.length; i++) {
+      play_buttons[i].click();
+    }
+    console.log('play all clicked after key down');
   }
 });
 //global key up event listener to stop all tracks if doPianoKeys checkbox is checked
 document.addEventListener('keyup', (e) => {
+  kpress=false;
+  //check for doPianoKeys checkbox
+  if(!document.getElementById('doPianoKeys').checked) return;
   // use key codes as piano keys
   const key = e.code;//es. KeyA, KeyS, KeyD, KeyF, KeyG, KeyH, KeyJ, KeyK, KeyL etc.
   // check if the key is in the note mappings
   if (key in NoteMappings) {
     // stop all tracks via the stop all button
     document.getElementById('stopAll').click();
+    console.log('stop all clicked after key up');
   }
 });
 // autosave every 1 second
