@@ -75,8 +75,14 @@ class Track {
   create(waveform, volume, frequency) {
     this.trackElement = document.importNode(document.getElementById('trackTemplate').content, true).querySelector('.track');
     document.getElementById('tracks').appendChild(this.trackElement);
+    //update displays
     this.trackElement.querySelector('.freqdisplay').textContent = frequency;
     this.trackElement.querySelector('.volumedisplay').textContent = volume;
+    //update inputs
+    this.trackElement.querySelector('.frequency').value = frequency;
+    this.trackElement.querySelector('.volume').value = volume;
+    //update waveform
+    this.trackElement.querySelector('.waveform').value = waveform;
     this.trackElement.querySelector('.trackTitle').textContent = 'Track ' + document.querySelectorAll('.track').length;
     //add this to the trackElement as data so that we can access it later
     const oscillator = new OscillatorWidget(waveform, volume, frequency);
